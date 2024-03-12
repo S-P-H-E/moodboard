@@ -54,7 +54,7 @@ export default function Board() {
     }, [pathname]);
 
     if (!boardData) {
-        return <p>Loading...</p>;
+        return <p>Loading..</p>;
     }
 
     return (
