@@ -5,12 +5,18 @@ import { db } from '@/utils/firebase';
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import { FaUserCircle } from "react-icons/fa";
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { auth } from '@/utils/firebase';
+import { message } from 'antd';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { FaGoogle } from 'react-icons/fa';
 
 export default function Board() {
     const [boardData, setBoardData] = useState(null);
     const params = useParams();
     let pathname = Array.isArray(params.board) ? params.board[0] : params.board;
     pathname = decodeURIComponent(pathname);
+    const [user] = useAuthState(auth);
 
     useEffect(() => {
         const fetchBoardData = async () => {
@@ -66,9 +72,9 @@ export default function Board() {
                         <p className='italic'>By {boardData.creator.name}</p>
                     </div>
                 </div> */}
-                {/* <div className='absolute w-full z-20'>
+                <div className='absolute w-full z-20'>
                     <Navbar />
-                </div> */}
+                </div>
                 <div className='bg-gradient-to-t from-black to-transparent to-90% h-full w-full absolute z-10'/>
                 <img src={boardData.banner} className='w-full h-full object-cover'/>
             </div>
