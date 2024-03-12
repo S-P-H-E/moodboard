@@ -14,7 +14,7 @@
 }
 
 [data-theme='dark'] {
-  --background: #0d0d0e;
+  --background: black;
   --background-80: #0d0d0ea9;
   --middle: #161617;
   --border: #222222;

@@ -27,7 +27,7 @@ export default function Navbar() {
                     'Light'
                 )}
             </button> */}
-            <div className='bg-[--light-gray] w-full rounded-full flex items-center px-5 gap-2 h-full'>
+            <div className='backdrop-blur-xl shadow-xl w-full rounded-full flex items-center px-5 gap-2 h-full'>
                 <FaMagnifyingGlass className='text-[#767676]'/>
                 <input placeholder='Search' className='placeholder:text-[#757575] bg-transparent w-full h-full outline-none'/>
             </div>

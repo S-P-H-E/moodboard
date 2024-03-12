@@ -10,11 +10,11 @@ import { BsThreeDots } from "react-icons/bs";
 import Link from 'next/link';
 
 interface ContentData {
-    Title: string;
-    Author: string;
-    AuthorImg: string;
-    Image: string;
-    Moodboard: string;
+    title: string;
+    // Author: string;
+    // AuthorImg: string;
+    image: string;
+    moodboard: string;
 }
 
 export default function Home() {
@@ -36,11 +36,11 @@ export default function Home() {
 
                     if (data) {
                         setContentData({
-                            Title: data.Title || '',
-                            Author: data.Author || '',
-                            AuthorImg: data.AuthorImg || '',
-                            Image: data.Image || '',
-                            Moodboard: data.Moodboard || '',
+                            title: data.title || '',
+                            // Author: data.Author || '',
+                            // AuthorImg: data.AuthorImg || '',
+                            image: data.image || '',
+                            moodboard: data.moodboard || '',
                         });
                     }
                 }
@@ -54,24 +54,24 @@ export default function Home() {
         <>
             <Navbar />
             <div className='w-[1000px] flex mx-auto rounded-[1.5rem] shadow-2xl border border-[--border] p-7'>
-                <Image src={contentData?.Image ?? ''} width={500} height={0} alt='logo' className='rounded-2xl' />
+                <Image src={contentData?.image ?? ''} width={500} height={0} alt='logo' className='rounded-2xl' />
                 <div className='p-5 flex flex-col justify-between'>
                     <div>
                         <div className='pb-4 flex justify-between items-center'>
                             <BsThreeDots size={30}/>
-                            <Link href={`/${contentData?.Moodboard}`}>
-                                <h1 className='text-sm font-semibold bg-[--foreground] rounded-full text-[--background] px-4 py-1'>{contentData?.Moodboard}</h1>
+                            <Link href={`/board/${contentData?.moodboard}`}>
+                                <h1 className='text-sm font-semibold bg-[--foreground] rounded-full text-[--background] px-4 py-1'>{contentData?.moodboard}</h1>
                             </Link>
                         </div>
-                        <h1 className='text-3xl font-medium'>{contentData?.Title}</h1>
+                        <h1 className='text-3xl font-medium'>{contentData?.title}</h1>
                     </div>
-                    <div className='flex gap-3'>
+                    {/* <div className='flex gap-3'>
                         <Image src={contentData?.AuthorImg ?? ''} width={50} height={0} className='rounded-full' alt='img'/>
                         <div>
                             <p className='text-md font-semibold'>{contentData?.Author}</p>
                             <p className='text-md text-[--gray]'>Author</p>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </>
