@@ -11,10 +11,12 @@ import Link from 'next/link';
 
 interface ContentData {
     title: string;
-    // Author: string;
-    // AuthorImg: string;
     image: string;
-    moodboard: string;
+    creator: string;
+    banner: string;
+    description: string;
+    link: string;
+    tag: string;
 }
 
 export default function Home() {
@@ -37,10 +39,12 @@ export default function Home() {
                     if (data) {
                         setContentData({
                             title: data.title || '',
-                            // Author: data.Author || '',
-                            // AuthorImg: data.AuthorImg || '',
                             image: data.image || '',
-                            moodboard: data.moodboard || '',
+                            creator: data.creator || '',
+                            banner: data.banner || '',
+                            description: data.description || '',
+                            link: data.link || '',
+                            tag: data.tag || ''
                         });
                     }
                 }
@@ -53,17 +57,33 @@ export default function Home() {
     return (
         <>
             <Navbar />
-            <div className='w-[1000px] flex mx-auto rounded-[1.5rem] shadow-2xl border border-[--border] p-7'>
-                <Image src={contentData?.image ?? ''} width={500} height={0} alt='logo' className='rounded-2xl' />
-                <div className='p-5 flex flex-col justify-between'>
-                    <div>
-                        <div className='pb-4 flex justify-between items-center'>
-                            <BsThreeDots size={30}/>
-                            <Link href={`/board/${contentData?.moodboard}`}>
-                                <h1 className='text-sm font-semibold bg-[--foreground] rounded-full text-[--background] px-4 py-1'>{contentData?.moodboard}</h1>
-                            </Link>
+            <div className='w-[1000px] flex mx-auto rounded-[1.5rem] shadow-2xl border border-[--border]'>
+                <div className='w-[900px] relative bg-blue-500'>
+                    <img src={contentData?.image ?? ''} width={1000} height={0} className='rounded-l-2xl w-full' />
+                    <div className='absolute z-10 bg-red-500'>
+                        <Link href={`/board/${contentData?.creator}`}>
+                            <div className='font-semibold bg-[--foreground] rounded-full text-[--background] px-4 py-1 w-fit'>
+                                <h1>
+                                    View Image
+                                </h1>
+                            </div>
+                        </Link>
+                    </div>
+                </div>
+                
+                <div className='p-5 flex flex-col justify-between w-full'>
+                    <div className='flex flex-col gap-2 justify-between h-full'>
+                        {/* <div className='pb-4 flex justify-between items-center w-full'>
+
+                        </div> */}
+                        <div>
+                            <h1 className='text-4xl font-medium'>{contentData?.title}</h1>
+                            <p className='text-[--gray]'>{contentData?.description}</p>
                         </div>
-                        <h1 className='text-3xl font-medium'>{contentData?.title}</h1>
+
+                        <Link href={`/board/${contentData?.creator}`}>
+                            <h1 className='text-sm font-semibold bg-[--foreground] rounded-full text-[--background] px-4 py-1 w-fit'>{contentData?.creator}</h1>
+                        </Link>
                     </div>
                     {/* <div className='flex gap-3'>
                         <Image src={contentData?.AuthorImg ?? ''} width={50} height={0} className='rounded-full' alt='img'/>
