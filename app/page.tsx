@@ -56,14 +56,14 @@ export default function Home() {
       <Navbar />
 
       {/* Dashboard */}
-      <div className='p-10 grid md:grid-cols-5 gap-y-3 gap-3'>
+      <div className='grid md:grid-cols-5 gap-y-3 gap-3 px-10'>
         {content.map((item, index) => (
           <Link key={index} href={`/posts/${item.id}`} className={`h-fit flex flex-col items-center`}>
             <img src={item.image} width={300} height={0} className='rounded-3xl h-[300px] object-cover'/>
             <div className='flex flex-col gap-2 m-2'>
-              <h1 className='text-xl font-medium'>
-              {truncateText(item.title, 25)}
-              </h1>
+              {/* <h1 className='text-xl font-medium'>
+                {truncateText(item.title, 25)}
+              </h1> */}
               {/* <div className='flex gap-3'>
                 <img src={item.AuthorImg} width={30} height={0} className='rounded-full'/>
                 <p>{item.Author}</p>

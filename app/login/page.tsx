@@ -32,6 +32,7 @@ function Login() {
           name: res.user.displayName,
           email: res.user.email,
           profileImg: res.user.photoURL,
+          
         });
         console.log('Document written with ID:', docRef.id);
       } else {

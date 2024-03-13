@@ -6,9 +6,9 @@ import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import { FaUserCircle } from "react-icons/fa";
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { auth } from '@/utils/firebase';
+
 import { message } from 'antd';
-import { useAuthState } from 'react-firebase-hooks/auth';
+
 import { FaGoogle } from 'react-icons/fa';
 
 export default function Board() {
@@ -16,7 +16,6 @@ export default function Board() {
     const params = useParams();
     let pathname = Array.isArray(params.board) ? params.board[0] : params.board;
     pathname = decodeURIComponent(pathname);
-    const [user] = useAuthState(auth);
 
     useEffect(() => {
         const fetchBoardData = async () => {
