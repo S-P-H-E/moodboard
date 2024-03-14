@@ -99,7 +99,7 @@ export default function Navbar() {
             const moodboardRef = collection(db, 'moodboards');
             const newMoodboardDoc = await addDoc(moodboardRef, {
                 banner: '',
-                creator: user.uid, // Assuming user is logged in and you want to store the UID of the creator
+                creator: '', // Assuming user is logged in and you want to store the UID of the creator
                 name: moodboard,
                 posts: [],
             });
@@ -223,10 +223,6 @@ export default function Navbar() {
                                 <div>
                                     <h1>Link <a className='text-[--gray]'>(optional)</a></h1>
                                     <input value={link} onChange={(e) => setLink(e.target.value)} placeholder='Add a link' className='px-4 p-6 mt-2 w-[500px] h-[40px] rounded-xl bg-[--background] border-2 border-[--stroke]'/>
-                                </div>
-                                <div>
-                                    <h1>Moodboard</h1>
-                                    <input value={moodboard} onChange={(e) => setMoodboard(e.target.value)} placeholder='Give your board a name' className='px-4 p-6 mt-2 w-[500px] h-[40px] rounded-xl bg-[--background] border-2 border-[--stroke]'/>
                                 </div>
                                 <div>
                                     <h1>Tag</h1>
