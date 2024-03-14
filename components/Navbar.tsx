@@ -15,10 +15,7 @@ import {
     Drawer,
     DrawerClose,
     DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
     DrawerHeader,
-    DrawerTitle,
     DrawerTrigger,
   } from "@/components/ui/drawer"
 import {useCallback} from 'react'
@@ -33,18 +30,15 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Progress, message } from 'antd';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
   
 export default function Navbar() {
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [fileError, setFileError] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
     const [user] = useAuthState(auth);
-
+    const { theme, setTheme } = useTheme()
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [link, setLink] = useState('');
-    const [moodboard, setMoodboard] = useState('');
     const [selectedTag, setSelectedTag] = useState('');
     const [uploadProgress, setUploadProgress] = useState(0);
     const [postImageUrl, setPostImageUrl] = useState<string | null>(null);
@@ -95,6 +89,7 @@ export default function Navbar() {
             return;
         }
     
+<<<<<<< HEAD
         if (!moodboard) {
             const moodboardRef = collection(db, 'moodboards');
             const newMoodboardDoc = await addDoc(moodboardRef, {
@@ -102,40 +97,63 @@ export default function Navbar() {
                 creator: '', // Assuming user is logged in and you want to store the UID of the creator
                 name: moodboard,
                 posts: [],
+=======
+        try {
+            const postsRef = collection(db, 'posts');
+            const newPostRef = await addDoc(postsRef, {
+                title,
+                description,
+                link,
+                tag: selectedTag,
+                image: postImageUrl,
+                creator: user?.displayName,
+>>>>>>> 517f690f9f85fe433d5c73e30b6d1a75a9f99f1f
             });
-            setMoodboard(newMoodboardDoc.id);
-        }
     
-        const postsRef = collection(db, 'posts');
-        addDoc(postsRef, {
-            title,
-            description,
-            link,
-            moodboard,
-            tag: selectedTag,
-            image: postImageUrl, // Set the image field to the postImageUrl
-            
-        }).then(() => {
-            message.success('Post created successfully.');
-            setTitle('');
-            setDescription('');
-            setLink('');
-            setSelectedTag('');
-            setMoodboard('');
-            setPostImageUrl(null); // Reset postImageUrl after submission
-        }).catch((error) => {
+            const userEmail = user?.email; // Assuming user is logged in
+            if (userEmail) {
+                const usersRef = collection(db, 'users');
+                const querySnapshot = await getDocs(query(usersRef, where('email', '==', userEmail)));
+    
+                if (!querySnapshot.empty) {
+                    const userDoc = querySnapshot.docs[0]; // Assuming there's only one document per user
+                    const userData = userDoc.data();
+                    const postsArray = userData.posts || [];
+                    postsArray.push(newPostRef.id);
+    
+                    // Update the user document with the posts array and the banner
+                    await updateDoc(userDoc.ref, { 
+                        posts: postsArray,
+                        
+                    });
+    
+                    message.success('Post created successfully.');
+                    setTitle('');
+                    setDescription('');
+                    setLink('');
+                    setSelectedTag('');
+                    setPostImageUrl(null); // Reset postImageUrl after submission
+                } else {
+                    console.error('User document not found for email:', userEmail);
+                    message.error('Failed to find user document.');
+                }
+            } else {
+                console.error('User email not available.');
+                message.error('User email not available.');
+            }
+        } catch (error) {
             console.error('Error creating post:', error);
             message.error('Failed to create post.');
-        });
+        }
     };
     
-
     const tags = [
         { name: 'Cars' },
         { name: 'Mansions' },
         { name: 'Private Jets' },
         { name: 'Yachts' },
         { name: 'Watches' },
+        { name: 'Clothing' },
     ];
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -154,13 +172,13 @@ export default function Navbar() {
                         <img src="/logo.png" width={30} className='invert w-[30px] mx-auto'/>
                     </div>
                 </Link> */}
-                {/* <button className='text-[--foreground] px-4 py-3 rounded-full font-semibold w-[110px] border border-[--border]' onClick={() => setTheme(clsx(theme === 'light' ? 'dark' : 'light'))}>
+                <button className='text-[--foreground] px-4 py-3 rounded-full font-semibold w-[110px] border border-[--border]' onClick={() => setTheme(clsx(theme === 'light' ? 'dark' : 'light'))}>
                     {theme === 'light' ? (
                         'Dark'
                     ) : (
                         'Light'
                     )}
-                </button> */}
+                </button>
                 <div className='backdrop-blur-xl shadow-xl w-full rounded-xl flex items-center py-4 px-6 gap-2 h-full bg-[--dark-gray] border border-[--stroke]'>
                     <FaMagnifyingGlass className='text-[#767676]'/>
                     <input placeholder='Search' className='placeholder:text-[#757575] bg-transparent w-full h-full outline-none'/>

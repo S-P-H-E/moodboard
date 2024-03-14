@@ -1,20 +1,17 @@
 "use client"
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { collection, getDocs } from 'firebase/firestore';
-import { auth, db } from '@/utils/firebase';
+import { collection, getDocs, onSnapshot } from 'firebase/firestore';
+import { db } from '@/utils/firebase';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
+import Card from '@/components/Card';
 
 interface Post {
   id: string;
   title: string;
-  // author: string;
-  // authorImg: string;
+  tag: string;
   image: string;
-  moodboard: string;
 }
-
 
 export default function Home() {
   const [content, setContent] = useState<Post[]>([]);
@@ -22,25 +19,27 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, 'posts'));
-        const posts: Post[] = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data() as Post; // Explicitly cast to the Post type
-          posts.push({
-            id: doc.id,
-            title: data.title || '',
-            // author: data.author || '',
-            // AuthorImg: data.AuthorImg || '',
-            image: data.image || '',
-            moodboard: data.moodboard || '',
+        const unsubscribe = onSnapshot(collection(db, 'posts'), (querySnapshot) => {
+          const posts: Post[] = [];
+          querySnapshot.forEach((doc) => {
+            const data = doc.data() as Post;
+            posts.push({
+              id: doc.id,
+              title: data.title || '',
+              tag: data.tag || '',
+              image: data.image || '',
+            });
           });
+          setContent(posts);
         });
-        setContent(posts);
+  
+        // Return a cleanup function to unsubscribe from the snapshot listener
+        return () => unsubscribe();
       } catch (error) {
         console.error('Error fetching data from Firebase:', error);
       }
     };
-
+  
     fetchData();
   }, []);
 
@@ -53,23 +52,15 @@ export default function Home() {
 
   return (
     <>
+      {/* <div className='w-fit mx-auto text-center p-10 flex flex-col gap-2'>
+        <h1 className='text-5xl font-semibold'>Moodboard</h1>
+        <p>The best place to create your dream life and view the dream life of others</p>
+      </div> */}
       <Navbar />
-
       {/* Dashboard */}
-      <div className='grid md:grid-cols-5 gap-y-3 gap-3 px-10'>
+      <div className='flex flex-wrap gap-3 px-10'>
         {content.map((item, index) => (
-          <Link key={index} href={`/posts/${item.id}`} className={`h-fit flex flex-col items-center`}>
-            <img src={item.image} width={300} height={0} className='rounded-3xl h-[300px] object-cover'/>
-            <div className='flex flex-col gap-2 m-2'>
-              {/* <h1 className='text-xl font-medium'>
-                {truncateText(item.title, 25)}
-              </h1> */}
-              {/* <div className='flex gap-3'>
-                <img src={item.AuthorImg} width={30} height={0} className='rounded-full'/>
-                <p>{item.Author}</p>
-              </div> */}
-            </div>
-          </Link>
+          <Card key={index} post={item} />
         ))}
       </div>
     </>
